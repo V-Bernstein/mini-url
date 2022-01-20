@@ -1,0 +1,13 @@
+spring:
+  datasource: 
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/mini_url
+    username: root
+    password: pword
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL5Dialect
+  flyway:
+    url: jdbc:mysql://localhost:3306/mysql
+    schemas: mini_url
+    user: root
+    password: pword
