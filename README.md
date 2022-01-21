@@ -1,9 +1,11 @@
-docker pull mysql
-docker run --name url-storage -e MYSQL_ROOT_PASSWORD=pword -p 3306:3306 -d mysql:latest
-docker exec -it url-storage /bin/sh
-    mysql -uroot -p
-    # Use the password we set up when running the docker command
-    CREATE DATABASE mini_url;
+# Steps to run project locally
+## DB setup
+1. docker pull mysql
+2. docker run --name url-storage -e MYSQL_ROOT_PASSWORD=pword -p 3306:3306 -d mysql:latest
+3. docker exec -it url-storage /bin/sh
+    1. mysql -uroot -p
+    ### // Use the password we set up when running the docker command
+    2. CREATE DATABASE mini_url;
 
-# To run via CLI
+## Run application via CLI
 ./gradlew bootRun

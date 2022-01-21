@@ -33,14 +33,14 @@ public class UrlControllerTest {
         verify(mockUrlService).shortenUrl(input);
     }
 
-    @Test
-    void redirectUrl_calls_service() {
-        String input = "http://short.com/";
-        String expected = "http://someUrl.com/";
-        when(mockUrlService.redirectUrl(input)).thenReturn(expected);
+    // @Test
+    // void redirectUrl_calls_service() {
+    //     String input = "http://short.com/";
+    //     String expected = "http://someUrl.com/";
+    //     when(mockUrlService.redirectUrl(input)).thenReturn(expected);
 
-        String actual = urlController.redirectUrl(input);
-        assertEquals(expected, actual);
-        verify(mockUrlService).redirectUrl(input);
-    }
+    //     String actual = urlController.redirectUrl(input);
+    //     assertEquals(expected, actual);
+    //     verify(mockUrlService).redirectUrl(input);
+    // }
 }
