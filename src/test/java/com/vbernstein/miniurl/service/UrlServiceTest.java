@@ -9,6 +9,7 @@ import static org.mockito.Mockito.when;
 
 import java.util.Optional;
 
+import com.vbernstein.miniurl.entity.UrlEntity;
 import com.vbernstein.miniurl.repository.UrlRepository;
 import com.vbernstein.miniurl.service.UrlService;
 
@@ -59,7 +60,9 @@ public class UrlServiceTest {
     void redirectUrl_returns_fullUrl() {
         String input = "abcde1";
         String expected = "www.wee.com";
-        when(mockUrlRepository.getByMini(input)).thenReturn(Optional.of(expected));
+        UrlEntity entity = new UrlEntity();
+        entity.setLongUrl(expected);
+        when(mockUrlRepository.getByMini(input)).thenReturn(Optional.of(entity));
         try {
             String actual = urlService.redirectUrl(input);
             assertEquals(expected, actual);

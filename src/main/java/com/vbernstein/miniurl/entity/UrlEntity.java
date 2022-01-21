@@ -1,7 +1,5 @@
 package com.vbernstein.miniurl.entity;
 
-import java.sql.Date;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -22,11 +20,8 @@ public class UrlEntity {
     Long id;
 
     @Column(name="MINI")
-    String url;
+    String miniUrl;
     
-    @Column(name="BASE")
+    @Column(name="LONG")
     String longUrl;
-
-    @Column(name="DATE_CREATED")
-    Date dateCreated;
 }
