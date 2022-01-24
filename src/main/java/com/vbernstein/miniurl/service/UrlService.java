@@ -9,8 +9,6 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class UrlService {
-
-    // 36^6 = 2,176,782,336 aka 2 billion
     private static final int MINI_URL_LENGTH = 6;
     private static final String FIRST_MINI_URL = "aaaaaa";
 
@@ -23,7 +21,7 @@ public class UrlService {
     public String shortenUrl(String urlToShorten) {
         Optional<UrlEntity> mostRecentOpt = urlRepository.getLatestRecord();
         UrlEntity toSave = new UrlEntity();
-        toSave.setLongUrl(urlToShorten);
+        toSave.setFullUrl(urlToShorten);
         if (mostRecentOpt.isEmpty()) { // Table is empty
             toSave.setMiniUrl(FIRST_MINI_URL);
         } else {
@@ -36,20 +34,20 @@ public class UrlService {
             }
             toSave.setMiniUrl(newMiniUrl);            
         }
-        UrlEntity savedEntity = urlRepository.save(toSave); // TODO: Handle exceptions
+        UrlEntity savedEntity = urlRepository.save(toSave); // TODO: Handle errors
         return savedEntity.getMiniUrl();
     }
 
     public String redirectUrl(String miniUrl) throws Exception {
-        if (!isValidMini(miniUrl)) {
-            throw new RuntimeException("Bad input"); // TODO: Not RE
+        if (!isValidMini(miniUrl)) {       
+            throw new RuntimeException("Invalid mini URL"); // TODO: Throw more specific exception
         }
         miniUrl = miniUrl.toLowerCase(); // Want to handle upper-case letters as lower-case
         Optional<UrlEntity> fullUrl = urlRepository.getByMini(miniUrl);
-        if (fullUrl.isEmpty()) {
-            throw new RuntimeException("Nothing stored for mini URL"); // TODO: Throw something
+        if (fullUrl.isEmpty()) {  
+            throw new RuntimeException("Input not found"); // TODO: Throw exception to trigger 404
         } else {
-            return fullUrl.get().getLongUrl();
+            return fullUrl.get().getFullUrl();
         }
     }
 
@@ -63,7 +61,7 @@ public class UrlService {
                 continue;
             }
             if ((c >= 'a' && c < 'z') || (c >= '0' && c < '9')) { // Just increment
-                newMini[i] = c++;
+                newMini[i] = ++c;
                 shouldIncrement = false;
             } else if (c == 'z') {
                 newMini[i] = '0';
@@ -79,14 +77,13 @@ public class UrlService {
     }
 
     private boolean isValidMini(String input) {
-        System.out.println("In ivm");
         int length = input.length();
         if (length != MINI_URL_LENGTH) {
             return false;
         }
         for (int i = 0; i < length; i++) {
-            char c = input.charAt(i);
-            if (!Character.isAlphabetic(c) || !Character.isDigit(c)) {
+            char c = input.charAt(i);  
+            if (!Character.isAlphabetic(c) && !Character.isDigit(c)) {
                 return false;
             }
         }

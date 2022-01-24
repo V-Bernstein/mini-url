@@ -10,9 +10,9 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface UrlRepository extends JpaRepository<UrlEntity, Integer> {
-    @Query(value = "SELECT * FROM URL WHERE MINI = ?1", nativeQuery=true)
+    @Query(value = "SELECT * FROM url WHERE mini = ?1", nativeQuery=true)
     Optional<UrlEntity> getByMini(String mini);
 
-    @Query(value = "SELECT * FROM URL, (SELECT MAX(ID) as mx FROM URL) WHERE ID = mx", nativeQuery=true)
+    @Query(value = "SELECT * FROM url, (SELECT MAX(updated_timestamp) AS mx FROM url) AS sub WHERE url.updated_timestamp = sub.mx", nativeQuery=true)
     Optional<UrlEntity> getLatestRecord();
 }

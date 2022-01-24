@@ -1,27 +1,38 @@
 package com.vbernstein.miniurl.entity;
 
+import java.sql.Timestamp;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.UpdateTimestamp;
+
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 @Entity
-@Table(name = "URL")
+@Table(name = "url")
 @Getter
 @Setter
+@ToString
 public class UrlEntity {
     @Id
-    @GeneratedValue
-    @Column(name = "ID")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     Long id;
 
-    @Column(name="MINI")
+    @Column(name="mini")
     String miniUrl;
     
-    @Column(name="LONG")
-    String longUrl;
+    @Column(name="full_url")
+    String fullUrl;
+
+    @Column(name="updated_timestamp")
+    @UpdateTimestamp
+    Timestamp updatedTimestamp;
 }

@@ -24,9 +24,9 @@ public class UrlController {
     @GetMapping("/{url}")
     String redirectUrl(@PathVariable("url") String shortenedUrl) {
         try {
-            return this.urlService.redirectUrl(shortenedUrl); // TODO: Test errors, and return correct responses
+            return this.urlService.redirectUrl(shortenedUrl);
         } catch (Exception e) {
-            // TODO
+            // TODO: Handle different exceptions and use proper HTTP statuses
             return "";
         }
     }

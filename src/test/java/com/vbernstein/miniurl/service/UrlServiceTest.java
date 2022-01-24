@@ -2,7 +2,7 @@ package com.vbernstein.miniurl.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -11,7 +11,6 @@ import java.util.Optional;
 
 import com.vbernstein.miniurl.entity.UrlEntity;
 import com.vbernstein.miniurl.repository.UrlRepository;
-import com.vbernstein.miniurl.service.UrlService;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,15 +25,20 @@ public class UrlServiceTest {
         mockUrlRepository = mock(UrlRepository.class);
         urlService = new UrlService(mockUrlRepository);
     }
-
+    
     @Test
-    void shortenUrl_calls_huh() {
+    void shortenUrl_calls_repo_getLatest() {
         String input = "http://someUrl.com/";
-        String expected = "";
+        UrlEntity entity = new UrlEntity();
+        entity.setMiniUrl("");
+        when(mockUrlRepository.getLatestRecord()).thenReturn(Optional.empty());
+        when(mockUrlRepository.save(any(UrlEntity.class))).thenReturn(entity);
 
-        String actual = urlService.shortenUrl(input);
-        assertEquals(expected, actual);
+        urlService.shortenUrl(input);
+        verify(mockUrlRepository).getLatestRecord();
     }
+
+    // TODO: Further tests for shorten URL
 
     @Test
     void redirectUrl_throws_exception_for_short_input() {
@@ -61,7 +65,7 @@ public class UrlServiceTest {
         String input = "abcde1";
         String expected = "www.wee.com";
         UrlEntity entity = new UrlEntity();
-        entity.setLongUrl(expected);
+        entity.setFullUrl(expected);
         when(mockUrlRepository.getByMini(input)).thenReturn(Optional.of(entity));
         try {
             String actual = urlService.redirectUrl(input);
